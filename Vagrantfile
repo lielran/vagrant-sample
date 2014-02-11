@@ -17,18 +17,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # Every Vagrant virtual environment requires a box to build off of.
-  #config.vm.box = "centos6.5"
+  config.vm.box = "centos6.5"
   
   
 
   config.vm.provision "shell", inline: "echo Hello"
 
   config.vm.define "web" do |web|
-    web.vm.box = "apache"
+    web.vm.box = config.vm.box
   end
 
   config.vm.define "db" do |db|
-    db.vm.box = "mysql"
+    db.vm.box = config.vm.box
   end
 
   
