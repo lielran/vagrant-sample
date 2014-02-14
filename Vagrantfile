@@ -18,17 +18,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "centos6.5"
-  config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box"
-  
+  #config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box"
+  config.vm.box_url = "file://centos65-x86_64-20131205.box"
+  config.vm.synced_folder ".", "/vagrant"
 
   config.vm.provision "shell", inline: "echo Hello"
 
-  config.vm.define "web" do |web|
-    web.vm.box = config.vm.box
+  config.vm.define "server" do |server|
+    server.vm.box = config.vm.box
+    server.vm.network "private_network", ip: "10.0.0.200"
+
+    server.vm.provision "ansible" do |ansible|
+      ansible.inventory_path = "provisioning/hosts"
+      ansible.playbook = "provisioning/apache.yml"
+      ansible.verbose = true
+      ansible.sudo = true
+     
+    end
+    
   end
 
-  config.vm.define "db" do |db|
-    db.vm.box = config.vm.box
+  config.vm.define "proxy" do |proxy|
+    proxy.vm.box = config.vm.box
+    proxy.vm.network "private_network", ip: "10.0.0.201"
+
+    proxy.vm.provision "ansible" do |ansible|
+      ansible.inventory_path = "provisioning/hosts"
+      ansible.playbook = "provisioning/haproxy.yml"
+      ansible.verbose = true
+      ansible.sudo = true
+     
+    end
   end
 
   
