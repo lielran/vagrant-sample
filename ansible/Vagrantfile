@@ -6,10 +6,32 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos6.5"
   config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box"
-  config.vm.network :private_network, ip: "192.168.33.13"
+  
+  config.vm.define "server" do |server|
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "provisioning/playbook.yml"
-    ansible.inventory_path = "provisioning/ansible_hosts"
+    server.vm.box = config.vm.box
+    server.vm.network :private_network, ip: "192.168.44.44"
+
+    server.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provisioning/apache.yml"
+      ansible.inventory_path = "provisioning/hosts"
+      ansible.verbose = true
+      ansible.sudo = true
+    end
   end
+
+  config.vm.define "proxy" do |proxy|
+
+    proxy.vm.box = config.vm.box
+    proxy.vm.network :private_network, ip: "192.168.55.55"
+
+    proxy.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provisioning/haproxy.yml"
+      ansible.inventory_path = "provisioning/hosts"
+      ansible.verbose = true
+      ansible.sudo = true
+    end
+  end
+  
+
 end
