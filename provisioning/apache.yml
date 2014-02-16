@@ -1,4 +1,4 @@
-    - hosts: web
+    - hosts: all
       tasks:
         - name: Updates apt cache
           apt: update_cache=true

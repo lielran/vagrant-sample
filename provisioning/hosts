@@ -1,5 +1,6 @@
 [server]
-server.exelate.com   ansible_ssh_host=10.0.0.200   ansible_ssh_user=vagrant nickname=server vm=1
+192.168.55.55
 
-[proxy]
-proxy.exelate.com ansible_ssh_host=10.0.0.201  ansible_ssh_user=vagrant nickname=proxy vm=2
+
+
+
